@@ -19,7 +19,6 @@ public class TaskController {
     @GetMapping("/user")
         public List<Task> getTasks(@AuthenticationPrincipal UserDetails userDetails) {
             String username = userDetails.getUsername();
-            System.out.println("USER DETAILS: " + username);
             return taskService.getTasksForUser(username);
     }
 
@@ -30,7 +29,6 @@ public class TaskController {
 
     @PostMapping
     public Task createTask(@RequestBody Task task, @AuthenticationPrincipal UserDetails userDetails) {
-
         return taskService.createTask(task, userDetails.getUsername());
     }
 

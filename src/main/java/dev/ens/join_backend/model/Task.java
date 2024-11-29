@@ -17,5 +17,8 @@ public class Task {
     private String priority;
     private String dueDate;
     private String assignee;
-    private String createdBy;
+
+    @ManyToOne
+    @JoinColumn(name = "created_by", referencedColumnName = "user_id")
+    private User createdBy;
 }
