@@ -10,35 +10,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/subtasks")
+@RequestMapping("/api/tasks")
 @RequiredArgsConstructor
 public class SubtaskController {
 
     private final SubtaskService subtaskService;
 
 
-    @PostMapping("/{taskId}")
+    @PostMapping("/{taskId}/subtask")
     public ResponseEntity<Subtask> createSubtask(@PathVariable Long taskId, @RequestBody Subtask subtask) {
         return ResponseEntity.ok(subtaskService.createSubtask(taskId, subtask));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/subtask/{id}")
     public ResponseEntity<Subtask> getSubtaskById(@PathVariable Long id) {
         return ResponseEntity.ok(subtaskService.getSubtaskById(id));
     }
 
-    @GetMapping("/task/{taskId}")
+    @GetMapping("/{taskId}/subtasks")
     public ResponseEntity<List<Subtask>> getSubtasksForTask(@PathVariable Long taskId) {
         return ResponseEntity.ok(subtaskService.getSubtasksForTask(taskId));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/subtask/{id}")
     public ResponseEntity<Void> deleteSubtask(@PathVariable Long id) {
         subtaskService.deleteSubtask(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/subtask/{id}")
     public ResponseEntity<Subtask> updateSubtask(
             @PathVariable Long id,
             @RequestBody SubtaskUpdateDTO updateRequest) {
