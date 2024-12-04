@@ -1,7 +1,11 @@
 package dev.ens.join_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,7 +22,9 @@ public class Task {
     private String dueDate;
     private String assignee;
 
-    @ManyToOne
-    @JoinColumn(name = "created_by", referencedColumnName = "user_id")
-    private User createdBy;
+    private Long createdByUserId;
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Subtask> subtasks = new ArrayList<>();
 }

@@ -27,7 +27,7 @@ public class TaskServiceImpl implements TaskService {
     public Task createTask(Task task, String username) {
         User user = userRepository.findByUserName(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        task.setCreatedBy(user);
+        task.setCreatedByUserId(user.getUserId());
         return taskRepository.save(task);
     }
 

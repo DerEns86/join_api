@@ -1,12 +1,12 @@
 package dev.ens.join_backend.repository;
 
-import dev.ens.join_backend.model.Task;
+import dev.ens.join_backend.model.Subtask;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface TaskRepository extends JpaRepository<Task, Long> {
-    List<Task> findByAssignee(String assignee);
+public interface SubtaskRepository extends JpaRepository<Subtask, Long> {
+    List<Subtask> findByTaskId(Long taskId);
 }
