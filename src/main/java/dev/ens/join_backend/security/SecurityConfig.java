@@ -57,10 +57,10 @@ public class SecurityConfig {
         );
         http.authorizeHttpRequests((requests)
                 -> requests
-//                .requestMatchers("/api/**").authenticated()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("api/auth/public/**").permitAll()
-//                .requestMatchers("/api/**").permitAll()
+                .requestMatchers("v3/**").permitAll()
+                .requestMatchers("swagger-ui/**").permitAll()
                 .anyRequest().authenticated());
 
 //        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -68,7 +68,6 @@ public class SecurityConfig {
                 exception.authenticationEntryPoint(unauthorizedHandler));
         http.addFilterBefore(authenticationJwtTokenFilter(),
                 UsernamePasswordAuthenticationFilter.class);
-        //http.formLogin(withDefaults());
         http.httpBasic(withDefaults());
         return http.build();
     }
