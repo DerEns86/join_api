@@ -1,6 +1,6 @@
 package dev.ens.join_backend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,7 +16,7 @@ public class Subtask {
 
     @ManyToOne
     @JoinColumn(name = "task_id", nullable = false)
-    @JsonBackReference
+    @JsonIgnore
     private Task task;
 
 }
