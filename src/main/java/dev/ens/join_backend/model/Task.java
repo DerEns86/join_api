@@ -24,7 +24,7 @@ public class Task {
 
     private Long createdByUserId;
 
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Subtask> subtasks = new ArrayList<>();
+ @ElementCollection
+ @CollectionTable(name = "subtasks", joinColumns = @JoinColumn(name = "task_id"))
+ private List<Subtask> subtasks = new ArrayList<>();
 }
