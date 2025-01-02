@@ -1,6 +1,5 @@
 package dev.ens.join_backend.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,7 +23,7 @@ public class Task {
 
     private Long createdByUserId;
 
- @ElementCollection
- @CollectionTable(name = "subtasks", joinColumns = @JoinColumn(name = "task_id"))
- private List<Subtask> subtasks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Subtask> subtasks = new ArrayList<>();
 }
