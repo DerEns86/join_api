@@ -1,5 +1,6 @@
 package dev.ens.join_backend.controller;
 
+import dev.ens.join_backend.model.Subtask;
 import dev.ens.join_backend.model.Task;
 import dev.ens.join_backend.services.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -47,4 +48,22 @@ public class TaskController {
         taskService.deleteTask(taskId);
         return ResponseEntity.noContent().build();
     }
+
+//    endpoints for subtasks
+
+    @PatchMapping("/{taskId}/subtasks")
+    public ResponseEntity<Task> updateSubtasks(
+            @PathVariable Long taskId,
+            @RequestBody List<Subtask> subtasks) {
+        return ResponseEntity.ok(taskService.updateSubtasks(taskId, subtasks));
+    }
+
+    @PostMapping("/{taskId}/subtask")
+    public ResponseEntity<Task> addSubtask(
+            @PathVariable Long taskId,
+            @RequestBody Subtask subtask,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(taskService.addSubtask(taskId, subtask));
+    }
+
 }

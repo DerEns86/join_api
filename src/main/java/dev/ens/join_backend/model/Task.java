@@ -23,6 +23,7 @@ public class Task {
 
     private Long createdByUserId;
 
+
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Subtask> subtasks = new ArrayList<>();
 }
