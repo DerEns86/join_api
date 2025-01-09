@@ -1,28 +1,21 @@
 package dev.ens.join_backend.services.impl;
 
-import dev.ens.join_backend.model.Subtask;
-import dev.ens.join_backend.model.Task;
-import dev.ens.join_backend.model.User;
+import dev.ens.join_backend.model.*;
 import dev.ens.join_backend.repository.TaskRepository;
 import dev.ens.join_backend.repository.UserRepository;
 import dev.ens.join_backend.services.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
-
-    @Override
-    public List<Task> getTasksForUser(String username) {
-        return taskRepository.findByAssignee(username);
-    }
 
     @Override
     public List<Task> getAllTasks() {
@@ -33,7 +26,17 @@ public class TaskServiceImpl implements TaskService {
     public Task createTask(Task task, String username) {
         User user = userRepository.findByUserName(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        task.setCreatedByUserId(user.getUserId());
+        task.setStatus(Status.PENDING);
+        if(task.getPriority() != Priority.LOW && task.getPriority() != Priority.URGENT){
+            task.setPriority(Priority.MEDIUM);
+        }
+        task.setDueDate(LocalDate.now());
+        task.setCreatedBy(user.getUserId());
+        task.setCreatedAt(LocalDate.now());
+        task.setUpdatedBy(user.getUserId());
+        task.setUpdatedAt(LocalDate.now());
+        task.setUpdateMessage(UpdateMessage.CREATED);
+        task.setContacts(new ArrayList<>());
         return taskRepository.save(task);
     }
 
@@ -47,7 +50,6 @@ public class TaskServiceImpl implements TaskService {
         taskToUpdate.setStatus(task.getStatus());
         taskToUpdate.setPriority(task.getPriority());
         taskToUpdate.setDueDate(task.getDueDate());
-        taskToUpdate.setAssignee(task.getAssignee());
 
         return taskRepository.save(taskToUpdate);
     }
@@ -61,28 +63,6 @@ public class TaskServiceImpl implements TaskService {
     public Task getTaskById(Long taskId) {
         return taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found with id: " + taskId));
-    }
-
-    @Override
-    public Task updateSubtasks(Long taskId, List<Subtask> subtasks) {
-        Task task = getTaskById(taskId);
-        task.setSubtasks(subtasks);
-        return taskRepository.save(task);
-    }
-
-    @Override
-    public Task addSubtask(Long taskId, Subtask subtask) {
-        // Task aus der Datenbank holen
-        Task task = getTaskById(taskId);
-
-        // Subtask zur Liste hinzufügen
-        if (task.getSubtasks() == null) {
-            task.setSubtasks(new ArrayList<>());
-        }
-        task.getSubtasks().add(subtask);
-
-        // Task inklusive neuer Subtask persistieren
-        return taskRepository.save(task);
     }
 
 }

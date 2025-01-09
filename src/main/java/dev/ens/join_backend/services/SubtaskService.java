@@ -11,7 +11,7 @@ public interface SubtaskService {
 
     void deleteSubtask(Long subtaskId);
 
-    List<Subtask> getSubtasksForTask(Long taskId);
+    List<Subtask> getSubtasksByTask(Long taskId);
 
     Subtask updateSubtask(Long subtaskId, String name, Boolean isCompleted);
 

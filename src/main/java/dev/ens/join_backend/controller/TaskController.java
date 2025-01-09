@@ -18,12 +18,6 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    @GetMapping("/user")
-        public ResponseEntity<List<Task>> getTasks(@AuthenticationPrincipal UserDetails userDetails) {
-            String username = userDetails.getUsername();
-            List<Task> tasks = taskService.getTasksForUser(username);
-            return ResponseEntity.ok(tasks);
-    }
 
     @GetMapping("/all")
     public ResponseEntity<List<Task>> getAllTasks(@AuthenticationPrincipal UserDetails userDetails) {
@@ -47,23 +41,6 @@ public class TaskController {
     public ResponseEntity<Void> deleteTask(@PathVariable Long taskId, @AuthenticationPrincipal UserDetails userDetails) {
         taskService.deleteTask(taskId);
         return ResponseEntity.noContent().build();
-    }
-
-//    endpoints for subtasks
-
-    @PatchMapping("/{taskId}/subtasks")
-    public ResponseEntity<Task> updateSubtasks(
-            @PathVariable Long taskId,
-            @RequestBody List<Subtask> subtasks) {
-        return ResponseEntity.ok(taskService.updateSubtasks(taskId, subtasks));
-    }
-
-    @PostMapping("/{taskId}/subtask")
-    public ResponseEntity<Task> addSubtask(
-            @PathVariable Long taskId,
-            @RequestBody Subtask subtask,
-            @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(taskService.addSubtask(taskId, subtask));
     }
 
 }
