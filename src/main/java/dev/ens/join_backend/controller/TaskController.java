@@ -1,6 +1,5 @@
 package dev.ens.join_backend.controller;
 
-import dev.ens.join_backend.model.Subtask;
 import dev.ens.join_backend.model.Task;
 import dev.ens.join_backend.services.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +17,6 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    @GetMapping("/user")
-        public ResponseEntity<List<Task>> getTasks(@AuthenticationPrincipal UserDetails userDetails) {
-            String username = userDetails.getUsername();
-            List<Task> tasks = taskService.getTasksForUser(username);
-            return ResponseEntity.ok(tasks);
-    }
 
     @GetMapping("/all")
     public ResponseEntity<List<Task>> getAllTasks(@AuthenticationPrincipal UserDetails userDetails) {
@@ -49,21 +42,9 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
-//    endpoints for subtasks
-
-    @PatchMapping("/{taskId}/subtasks")
-    public ResponseEntity<Task> updateSubtasks(
-            @PathVariable Long taskId,
-            @RequestBody List<Subtask> subtasks) {
-        return ResponseEntity.ok(taskService.updateSubtasks(taskId, subtasks));
+    @GetMapping("/urgent")
+    public ResponseEntity<List<Task>> getUrgentTasks() {
+        List<Task> tasks = taskService.getUrgentTasks();
+        return ResponseEntity.ok(tasks);
     }
-
-    @PostMapping("/{taskId}/subtask")
-    public ResponseEntity<Task> addSubtask(
-            @PathVariable Long taskId,
-            @RequestBody Subtask subtask,
-            @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(taskService.addSubtask(taskId, subtask));
-    }
-
 }
