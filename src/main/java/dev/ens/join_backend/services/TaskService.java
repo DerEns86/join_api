@@ -18,4 +18,5 @@ public interface TaskService {
 
     Task getTaskById(Long taskId);
 
+    List<Task> getUrgentTasks();
 }

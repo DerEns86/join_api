@@ -1,6 +1,5 @@
 package dev.ens.join_backend.controller;
 
-import dev.ens.join_backend.model.Subtask;
 import dev.ens.join_backend.model.Task;
 import dev.ens.join_backend.services.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -43,4 +42,9 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/urgent")
+    public ResponseEntity<List<Task>> getUrgentTasks() {
+        List<Task> tasks = taskService.getUrgentTasks();
+        return ResponseEntity.ok(tasks);
+    }
 }

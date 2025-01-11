@@ -65,4 +65,8 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new RuntimeException("Task not found with id: " + taskId));
     }
 
+    @Override
+    public List<Task> getUrgentTasks() {
+        return taskRepository.findAllByPriority(Priority.URGENT);
+    }
 }
