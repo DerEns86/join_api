@@ -29,8 +29,9 @@ public class TaskServiceImpl implements TaskService {
         task.setStatus(Status.PENDING);
         if(task.getPriority() != Priority.LOW && task.getPriority() != Priority.URGENT){
             task.setPriority(Priority.MEDIUM);
+        } else {
+            task.setPriority(task.getPriority());
         }
-        task.setDueDate(LocalDate.now());
         task.setCreatedBy(user.getUserId());
         task.setCreatedAt(LocalDate.now());
         task.setUpdatedBy(user.getUserId());
