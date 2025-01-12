@@ -1,5 +1,6 @@
 package dev.ens.join_backend.services.impl;
 
+import dev.ens.join_backend.dtos.TaskResponseDTO;
 import dev.ens.join_backend.model.*;
 import dev.ens.join_backend.repository.TaskRepository;
 import dev.ens.join_backend.repository.UserRepository;
@@ -18,8 +19,9 @@ public class TaskServiceImpl implements TaskService {
     private final UserRepository userRepository;
 
     @Override
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+    public List<TaskResponseDTO> getAllTasks() {
+        List<Task> tasks = taskRepository.findAll();
+        return getTaskResponseDTO(tasks);
     }
 
     @Override
@@ -66,8 +68,31 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new RuntimeException("Task not found with id: " + taskId));
     }
 
+
+
     @Override
-    public List<Task> getUrgentTasks() {
-        return taskRepository.findAllByPriority(Priority.URGENT);
+    public List<TaskResponseDTO> getUrgentTasks() {
+        List<Task> tasks = taskRepository.findAllByPriority(Priority.URGENT);
+        return getTaskResponseDTO(tasks);
+    }
+
+    private List<TaskResponseDTO> getTaskResponseDTO(List<Task> tasks) {
+        List<TaskResponseDTO> taskResponseDTOs = new ArrayList<>();
+        for (Task task : tasks) {
+            TaskResponseDTO dto = new TaskResponseDTO();
+            dto.setTaskId(task.getId());
+            dto.setName(task.getName());
+            dto.setDescription(task.getDescription());
+            dto.setStatus(task.getStatus());
+            dto.setPriority(task.getPriority());
+            dto.setDueDate(task.getDueDate());
+            List<String> contactNames = task.getContacts().stream()
+                    .map(contact -> contact.getFirstName() + " " + contact.getLastName())
+                    .toList();
+            dto.setAssignedContacts(contactNames);
+            dto.setCategoryName(task.getCategory() != null ? task.getCategory().getName() : null);
+            taskResponseDTOs.add(dto);
+        }
+        return taskResponseDTOs;
     }
 }
