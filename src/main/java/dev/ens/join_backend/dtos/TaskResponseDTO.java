@@ -1,7 +1,7 @@
 package dev.ens.join_backend.dtos;
 
-import dev.ens.join_backend.model.Priority;
-import dev.ens.join_backend.model.Status;
+import dev.ens.join_backend.model.enums.Priority;
+import dev.ens.join_backend.model.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -2,6 +2,9 @@ package dev.ens.join_backend.services.impl;
 
 import dev.ens.join_backend.dtos.TaskResponseDTO;
 import dev.ens.join_backend.model.*;
+import dev.ens.join_backend.model.enums.Priority;
+import dev.ens.join_backend.model.enums.Status;
+import dev.ens.join_backend.model.enums.UpdateMessage;
 import dev.ens.join_backend.repository.TaskRepository;
 import dev.ens.join_backend.repository.UserRepository;
 import dev.ens.join_backend.services.TaskService;

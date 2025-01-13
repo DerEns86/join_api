@@ -1,5 +1,8 @@
 package dev.ens.join_backend.model;
 
+import dev.ens.join_backend.model.enums.Priority;
+import dev.ens.join_backend.model.enums.Status;
+import dev.ens.join_backend.model.enums.UpdateMessage;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

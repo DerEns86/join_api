@@ -1,6 +1,7 @@
 package dev.ens.join_backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.ens.join_backend.model.enums.UpdateMessage;
 import jakarta.persistence.*;
 import lombok.Data;
 

@@ -2,7 +2,7 @@ package dev.ens.join_backend.services.impl;
 
 
 import dev.ens.join_backend.dtos.UserDTO;
-import dev.ens.join_backend.model.AppRole;
+import dev.ens.join_backend.model.enums.AppRole;
 import dev.ens.join_backend.model.Role;
 import dev.ens.join_backend.model.User;
 import dev.ens.join_backend.repository.RoleRepository;
