@@ -1,5 +1,6 @@
 package dev.ens.join_backend.model;
 
+import dev.ens.join_backend.model.enums.UpdateMessage;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
