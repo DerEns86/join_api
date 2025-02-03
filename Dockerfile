@@ -1,16 +1,16 @@
-# Use an official OpenJDK runtime as a parent image
-FROM eclipse-temurin:21-jdk AS build
+# Use Maven image with OpenJDK 21 as a parent image
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 
 # Set the working directory
 WORKDIR /app
 
 # Copy the Maven project descriptor (pom.xml) and install dependencies
 COPY pom.xml .
-RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
+RUN mvn dependency:go-offline
 
 # Copy the entire project and build it
 COPY . .
-RUN --mount=type=cache,target=/root/.m2 mvn clean package -DskipTests
+RUN mvn clean package -DskipTests
 
 # Use a minimal runtime image
 FROM eclipse-temurin:21-jre
