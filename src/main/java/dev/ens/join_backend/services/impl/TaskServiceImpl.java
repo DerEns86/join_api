@@ -5,6 +5,7 @@ import dev.ens.join_backend.model.*;
 import dev.ens.join_backend.model.enums.Priority;
 import dev.ens.join_backend.model.enums.Status;
 import dev.ens.join_backend.model.enums.UpdateMessage;
+import dev.ens.join_backend.repository.CategoryRepository;
 import dev.ens.join_backend.repository.TaskRepository;
 import dev.ens.join_backend.repository.UserRepository;
 import dev.ens.join_backend.services.TaskService;
@@ -20,6 +21,7 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public List<TaskResponseDTO> getAllTasks() {
@@ -43,6 +45,13 @@ public class TaskServiceImpl implements TaskService {
         task.setUpdatedAt(LocalDate.now());
         task.setUpdateMessage(UpdateMessage.CREATED);
         task.setContacts(new ArrayList<>());
+
+        if (task.getCategory() != null && task.getCategory().getName() != null) {
+            Category category = categoryRepository.findByName(task.getCategory().getName())
+                    .orElseThrow(() -> new RuntimeException("Category not found: " + task.getCategory().getName()));
+            task.setCategory(category);
+        }
+
         return taskRepository.save(task);
     }
 
