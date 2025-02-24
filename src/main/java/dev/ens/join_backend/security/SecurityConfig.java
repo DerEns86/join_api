@@ -76,7 +76,7 @@ public class SecurityConfig {
         corsConfig.setAllowedOrigins(Arrays.asList(frontendUrl, "http://localhost:4200", "http://localhost:8080"));
 
         // Allow specific HTTP methods
-        corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         // Allow specific headers
         corsConfig.setAllowedHeaders(Arrays.asList("*"));
         // Allow credentials (cookies, authorization headers)
