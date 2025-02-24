@@ -70,6 +70,16 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+   public Task updateTaskStatus(Long taskId, Task task){
+        Task taskToUpdate = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("No task found with id: " + taskId));
+        taskToUpdate.setStatus(task.getStatus());
+        taskToUpdate.setUpdateMessage(UpdateMessage.UPDATED);
+        taskToUpdate.setUpdatedAt(LocalDate.now());
+        return taskRepository.save(taskToUpdate);
+    }
+
+    @Override
     public void deleteTask(Long taskId) {
         taskRepository.deleteById(taskId);
     }
@@ -92,7 +102,7 @@ public class TaskServiceImpl implements TaskService {
         List<TaskResponseDTO> taskResponseDTOs = new ArrayList<>();
         for (Task task : tasks) {
             TaskResponseDTO dto = new TaskResponseDTO();
-            dto.setTaskId(task.getId());
+            dto.setId(task.getId());
             dto.setName(task.getName());
             dto.setDescription(task.getDescription());
             dto.setStatus(task.getStatus());
