@@ -26,4 +26,12 @@ public class SubtaskController {
             @RequestBody Subtask subtask) {
         return ResponseEntity.ok(subtaskService.createSubtask(taskId, subtask));
     }
+
+    @PutMapping("/{taskId}/subtask/{subtaskId}")
+    public ResponseEntity<Subtask> updateSubtask(
+            @PathVariable Long taskId,
+            @PathVariable Long subtaskId,
+            @RequestBody Subtask subtask) {
+        return ResponseEntity.ok(subtaskService.updateSubtask(taskId, subtaskId, subtask.getName(), subtask.isCompleted()));
+    }
 }
