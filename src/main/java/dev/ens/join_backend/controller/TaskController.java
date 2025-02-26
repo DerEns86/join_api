@@ -1,5 +1,6 @@
 package dev.ens.join_backend.controller;
 
+import dev.ens.join_backend.dtos.TaskResponseDTO;
 import dev.ens.join_backend.model.Task;
 import dev.ens.join_backend.services.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,8 @@ public class TaskController {
 
 
     @GetMapping("/all")
-    public ResponseEntity<List<Task>> getAllTasks(@AuthenticationPrincipal UserDetails userDetails) {
-        List<Task> tasks = taskService.getAllTasks();
+    public ResponseEntity<List<TaskResponseDTO>> getAllTasks() {
+        List<TaskResponseDTO> tasks = taskService.getAllTasks();
         return ResponseEntity.ok(tasks);
     }
 
@@ -36,6 +37,12 @@ public class TaskController {
         return ResponseEntity.ok(updatedTask);
     }
 
+    @PatchMapping("/{taskId}")
+    public ResponseEntity<Task> updateTaskStatus(@PathVariable Long taskId, @RequestBody Task task, @AuthenticationPrincipal UserDetails userDetails) {
+        Task updatedTask = taskService.updateTaskStatus(taskId, task);
+        return ResponseEntity.ok(updatedTask);
+    }
+
     @DeleteMapping("/{taskId}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long taskId, @AuthenticationPrincipal UserDetails userDetails) {
         taskService.deleteTask(taskId);
@@ -43,8 +50,8 @@ public class TaskController {
     }
 
     @GetMapping("/urgent")
-    public ResponseEntity<List<Task>> getUrgentTasks() {
-        List<Task> tasks = taskService.getUrgentTasks();
+    public ResponseEntity<List<TaskResponseDTO>> getUrgentTasks() {
+        List<TaskResponseDTO> tasks = taskService.getUrgentTasks();
         return ResponseEntity.ok(tasks);
     }
 }

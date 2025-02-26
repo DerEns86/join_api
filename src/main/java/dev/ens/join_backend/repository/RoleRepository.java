@@ -1,7 +1,7 @@
 package dev.ens.join_backend.repository;
 
 
-import dev.ens.join_backend.model.AppRole;
+import dev.ens.join_backend.model.enums.AppRole;
 import dev.ens.join_backend.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 

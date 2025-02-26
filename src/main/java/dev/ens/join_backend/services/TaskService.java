@@ -1,5 +1,6 @@
 package dev.ens.join_backend.services;
 
+import dev.ens.join_backend.dtos.TaskResponseDTO;
 import dev.ens.join_backend.model.Task;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public interface TaskService {
 
 
-    List<Task> getAllTasks();
+    List<TaskResponseDTO> getAllTasks();
 
     Task createTask(Task task, String username);
 
@@ -18,5 +19,7 @@ public interface TaskService {
 
     Task getTaskById(Long taskId);
 
-    List<Task> getUrgentTasks();
+    List<TaskResponseDTO> getUrgentTasks();
+
+    Task updateTaskStatus(Long taskId, Task task);
 }

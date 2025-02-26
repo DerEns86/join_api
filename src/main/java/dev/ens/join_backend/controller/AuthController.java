@@ -1,6 +1,6 @@
 package dev.ens.join_backend.controller;
 
-import dev.ens.join_backend.model.AppRole;
+import dev.ens.join_backend.model.enums.AppRole;
 import dev.ens.join_backend.model.Role;
 import dev.ens.join_backend.model.User;
 import dev.ens.join_backend.repository.RoleRepository;

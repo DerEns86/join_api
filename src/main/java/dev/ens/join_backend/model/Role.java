@@ -1,6 +1,7 @@
 package dev.ens.join_backend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import dev.ens.join_backend.model.enums.AppRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
