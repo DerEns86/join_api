@@ -65,6 +65,13 @@ public class TaskServiceImpl implements TaskService {
         taskToUpdate.setStatus(task.getStatus());
         taskToUpdate.setPriority(task.getPriority());
         taskToUpdate.setDueDate(task.getDueDate());
+        taskToUpdate.setUpdatedAt(LocalDate.now());
+        taskToUpdate.setUpdateMessage(UpdateMessage.UPDATED);
+
+
+        Category category = categoryRepository.findByName(task.getCategory().getName())
+                .orElseThrow(() -> new RuntimeException("Category not found: " + task.getCategory().getName()));
+        taskToUpdate.setCategory(category);
 
         return taskRepository.save(taskToUpdate);
     }
