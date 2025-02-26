@@ -34,4 +34,11 @@ public class SubtaskController {
             @RequestBody Subtask subtask) {
         return ResponseEntity.ok(subtaskService.updateSubtask(taskId, subtaskId, subtask.getName(), subtask.isCompleted()));
     }
+
+    @DeleteMapping("/subtask/{subtaskId}")
+    public ResponseEntity<Void> deleteSubtask(
+            @PathVariable Long subtaskId) {
+        subtaskService.deleteSubtask(subtaskId);
+        return ResponseEntity.noContent().build();
+    }
 }

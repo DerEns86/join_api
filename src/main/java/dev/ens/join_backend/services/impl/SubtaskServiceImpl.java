@@ -33,7 +33,7 @@ public class SubtaskServiceImpl implements SubtaskService {
 
     @Override
     public void deleteSubtask(Long subtaskId) {
-
+        subtaskRepository.deleteById(subtaskId);
     }
 
     @Override
