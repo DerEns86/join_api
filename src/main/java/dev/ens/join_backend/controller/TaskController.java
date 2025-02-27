@@ -54,4 +54,12 @@ public class TaskController {
         List<TaskResponseDTO> tasks = taskService.getUrgentTasks();
         return ResponseEntity.ok(tasks);
     }
+
+    @PostMapping("/{taskId}/contacts/{contactId}")
+    public ResponseEntity<Task> assignContactToTask(
+            @PathVariable Long taskId,
+            @PathVariable Long contactId) {
+        Task updatedTask = taskService.assignContactToTask(taskId, contactId);
+        return ResponseEntity.ok(updatedTask);
+    }
 }
