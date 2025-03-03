@@ -1,8 +1,10 @@
 package dev.ens.join_backend.security;
 
+import dev.ens.join_backend.model.Category;
 import dev.ens.join_backend.model.enums.AppRole;
 import dev.ens.join_backend.model.Role;
 import dev.ens.join_backend.model.User;
+import dev.ens.join_backend.repository.CategoryRepository;
 import dev.ens.join_backend.repository.RoleRepository;
 import dev.ens.join_backend.repository.UserRepository;
 import dev.ens.join_backend.security.jwt.AuthEntryPointJwt;
@@ -101,6 +103,7 @@ public class SecurityConfig {
     @Bean
     public CommandLineRunner initData(RoleRepository roleRepository,
                                       UserRepository userRepository,
+                                      CategoryRepository categoryRepository,
                                       PasswordEncoder passwordEncoder) {
         return args -> {
             Role userRole = roleRepository.findByRoleName(AppRole.ROLE_USER)
@@ -137,6 +140,27 @@ public class SecurityConfig {
                 admin.setSignUpMethod("email");
                 admin.setRole(adminRole);
                 userRepository.save(admin);
+            }
+
+            if (!categoryRepository.existsByName("Technical Task")){
+                Category technicalTask = new Category();
+                technicalTask.setName("Technical Task");
+                technicalTask.setUsed(false);
+                categoryRepository.save(technicalTask);
+            }
+
+            if (!categoryRepository.existsByName("Styling")){
+                Category stylingTask = new Category();
+                stylingTask.setName("Styling");
+                stylingTask.setUsed(false);
+                categoryRepository.save(stylingTask);
+            }
+
+            if (!categoryRepository.existsByName("User Story")){
+                Category userStoryTask = new Category();
+                userStoryTask.setName("User Story");
+                userStoryTask.setUsed(false);
+                categoryRepository.save(userStoryTask);
             }
         };
     }
