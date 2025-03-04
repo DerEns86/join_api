@@ -158,4 +158,39 @@ public class AuthController {
     public String currentUserName(@AuthenticationPrincipal UserDetails userDetails) {
         return (userDetails != null) ? userDetails.getUsername() : "";
     }
+
+    @PostMapping("/public/guest")
+    public ResponseEntity<?> guestLogin() {
+        String guestUsername = "guest";
+        String guestPassword = "password1"; // Ensure this matches the password set in SecurityConfig
+
+        Authentication authentication;
+        try {
+            authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(guestUsername, guestPassword));
+        } catch (AuthenticationException exception) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("message", "Bad credentials");
+            map.put("status", false);
+            return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
+        }
+
+        // Set the authentication
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        String jwtToken = jwtUtils.generateTokenFromUsername(userDetails);
+
+        // Collect roles from the UserDetails
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+
+        // Prepare the response body, now including the JWT token directly in the body
+        LoginResponse response = new LoginResponse(userDetails.getUsername(), roles, jwtToken);
+
+        // Return the response entity with the JWT token included in the response body
+        return ResponseEntity.ok(response);
+    }
 }
