@@ -1,8 +1,10 @@
 package dev.ens.join_backend.security;
 
+import dev.ens.join_backend.model.Category;
 import dev.ens.join_backend.model.enums.AppRole;
 import dev.ens.join_backend.model.Role;
 import dev.ens.join_backend.model.User;
+import dev.ens.join_backend.repository.CategoryRepository;
 import dev.ens.join_backend.repository.RoleRepository;
 import dev.ens.join_backend.repository.UserRepository;
 import dev.ens.join_backend.security.jwt.AuthEntryPointJwt;
@@ -73,10 +75,10 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
         // Allow specific origins
-        corsConfig.setAllowedOrigins(Arrays.asList(frontendUrl));
+        corsConfig.setAllowedOrigins(Arrays.asList(frontendUrl, "http://localhost:4200", "http://localhost:8080"));
 
         // Allow specific HTTP methods
-        corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         // Allow specific headers
         corsConfig.setAllowedHeaders(Arrays.asList("*"));
         // Allow credentials (cookies, authorization headers)
@@ -101,6 +103,7 @@ public class SecurityConfig {
     @Bean
     public CommandLineRunner initData(RoleRepository roleRepository,
                                       UserRepository userRepository,
+                                      CategoryRepository categoryRepository,
                                       PasswordEncoder passwordEncoder) {
         return args -> {
             Role userRole = roleRepository.findByRoleName(AppRole.ROLE_USER)
@@ -109,8 +112,8 @@ public class SecurityConfig {
             Role adminRole = roleRepository.findByRoleName(AppRole.ROLE_ADMIN)
                     .orElseGet(() -> roleRepository.save(new Role(AppRole.ROLE_ADMIN)));
 
-            if (!userRepository.existsByUserName("user1")) {
-                User user1 = new User("user1", "user1@example.com",
+            if (!userRepository.existsByUserName("guest")) {
+                User user1 = new User("guest", "guest@example.com",
                         passwordEncoder.encode("password1"));
                 user1.setAccountNonLocked(false);
                 user1.setAccountNonExpired(true);
@@ -137,6 +140,27 @@ public class SecurityConfig {
                 admin.setSignUpMethod("email");
                 admin.setRole(adminRole);
                 userRepository.save(admin);
+            }
+
+            if (!categoryRepository.existsByName("Technical Task")){
+                Category technicalTask = new Category();
+                technicalTask.setName("Technical Task");
+                technicalTask.setUsed(false);
+                categoryRepository.save(technicalTask);
+            }
+
+            if (!categoryRepository.existsByName("Styling")){
+                Category stylingTask = new Category();
+                stylingTask.setName("Styling");
+                stylingTask.setUsed(false);
+                categoryRepository.save(stylingTask);
+            }
+
+            if (!categoryRepository.existsByName("User Story")){
+                Category userStoryTask = new Category();
+                userStoryTask.setName("User Story");
+                userStoryTask.setUsed(false);
+                categoryRepository.save(userStoryTask);
             }
         };
     }

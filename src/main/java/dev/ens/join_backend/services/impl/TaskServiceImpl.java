@@ -5,6 +5,8 @@ import dev.ens.join_backend.model.*;
 import dev.ens.join_backend.model.enums.Priority;
 import dev.ens.join_backend.model.enums.Status;
 import dev.ens.join_backend.model.enums.UpdateMessage;
+import dev.ens.join_backend.repository.CategoryRepository;
+import dev.ens.join_backend.repository.ContactRepository;
 import dev.ens.join_backend.repository.TaskRepository;
 import dev.ens.join_backend.repository.UserRepository;
 import dev.ens.join_backend.services.TaskService;
@@ -20,6 +22,8 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+    private final ContactRepository contactRepository;
 
     @Override
     public List<TaskResponseDTO> getAllTasks() {
@@ -43,6 +47,13 @@ public class TaskServiceImpl implements TaskService {
         task.setUpdatedAt(LocalDate.now());
         task.setUpdateMessage(UpdateMessage.CREATED);
         task.setContacts(new ArrayList<>());
+
+        if (task.getCategory() != null && task.getCategory().getName() != null) {
+            Category category = categoryRepository.findByName(task.getCategory().getName())
+                    .orElseThrow(() -> new RuntimeException("Category not found: " + task.getCategory().getName()));
+            task.setCategory(category);
+        }
+
         return taskRepository.save(task);
     }
 
@@ -56,7 +67,39 @@ public class TaskServiceImpl implements TaskService {
         taskToUpdate.setStatus(task.getStatus());
         taskToUpdate.setPriority(task.getPriority());
         taskToUpdate.setDueDate(task.getDueDate());
+        taskToUpdate.setUpdatedAt(LocalDate.now());
+        taskToUpdate.setUpdateMessage(UpdateMessage.UPDATED);
 
+
+        Category category = categoryRepository.findByName(task.getCategory().getName())
+                .orElseThrow(() -> new RuntimeException("Category not found: " + task.getCategory().getName()));
+        taskToUpdate.setCategory(category);
+
+        return taskRepository.save(taskToUpdate);
+    }
+
+    @Override
+    public Task assignContactToTask(Long taskId, Long contactId) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        Contact contact = contactRepository.findById(contactId)
+                .orElseThrow(() -> new RuntimeException("Contact not found"));
+
+        task.getContacts().add(contact);
+        contact.getTasks().add(task);
+
+        taskRepository.save(task);
+        return task;
+    }
+
+    @Override
+   public Task updateTaskStatus(Long taskId, Task task){
+        Task taskToUpdate = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("No task found with id: " + taskId));
+        taskToUpdate.setStatus(task.getStatus());
+        taskToUpdate.setUpdateMessage(UpdateMessage.UPDATED);
+        taskToUpdate.setUpdatedAt(LocalDate.now());
         return taskRepository.save(taskToUpdate);
     }
 
@@ -83,7 +126,7 @@ public class TaskServiceImpl implements TaskService {
         List<TaskResponseDTO> taskResponseDTOs = new ArrayList<>();
         for (Task task : tasks) {
             TaskResponseDTO dto = new TaskResponseDTO();
-            dto.setTaskId(task.getId());
+            dto.setId(task.getId());
             dto.setName(task.getName());
             dto.setDescription(task.getDescription());
             dto.setStatus(task.getStatus());

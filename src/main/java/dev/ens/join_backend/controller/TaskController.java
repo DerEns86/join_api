@@ -37,6 +37,12 @@ public class TaskController {
         return ResponseEntity.ok(updatedTask);
     }
 
+    @PatchMapping("/{taskId}")
+    public ResponseEntity<Task> updateTaskStatus(@PathVariable Long taskId, @RequestBody Task task, @AuthenticationPrincipal UserDetails userDetails) {
+        Task updatedTask = taskService.updateTaskStatus(taskId, task);
+        return ResponseEntity.ok(updatedTask);
+    }
+
     @DeleteMapping("/{taskId}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long taskId, @AuthenticationPrincipal UserDetails userDetails) {
         taskService.deleteTask(taskId);
@@ -47,5 +53,13 @@ public class TaskController {
     public ResponseEntity<List<TaskResponseDTO>> getUrgentTasks() {
         List<TaskResponseDTO> tasks = taskService.getUrgentTasks();
         return ResponseEntity.ok(tasks);
+    }
+
+    @PostMapping("/{taskId}/contacts/{contactId}")
+    public ResponseEntity<Task> assignContactToTask(
+            @PathVariable Long taskId,
+            @PathVariable Long contactId) {
+        Task updatedTask = taskService.assignContactToTask(taskId, contactId);
+        return ResponseEntity.ok(updatedTask);
     }
 }

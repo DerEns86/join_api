@@ -13,6 +13,6 @@ public interface SubtaskService {
 
     List<Subtask> getSubtasksByTask(Long taskId);
 
-    Subtask updateSubtask(Long subtaskId, String name, Boolean isCompleted);
+    Subtask updateSubtask(Long taskId, Long subtaskId, String name, Boolean isCompleted);
 
 }

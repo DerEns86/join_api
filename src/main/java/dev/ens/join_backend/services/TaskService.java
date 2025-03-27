@@ -20,4 +20,8 @@ public interface TaskService {
     Task getTaskById(Long taskId);
 
     List<TaskResponseDTO> getUrgentTasks();
+
+    Task updateTaskStatus(Long taskId, Task task);
+
+    Task assignContactToTask(Long taskId, Long contactId);
 }

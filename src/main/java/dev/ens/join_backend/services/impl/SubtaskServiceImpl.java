@@ -33,7 +33,7 @@ public class SubtaskServiceImpl implements SubtaskService {
 
     @Override
     public void deleteSubtask(Long subtaskId) {
-
+        subtaskRepository.deleteById(subtaskId);
     }
 
     @Override
@@ -42,7 +42,11 @@ public class SubtaskServiceImpl implements SubtaskService {
     }
 
     @Override
-    public Subtask updateSubtask(Long subtaskId, String name, Boolean isCompleted) {
-        return null;
+    public Subtask updateSubtask(Long taskId, Long subtaskId, String name, Boolean isCompleted) {
+        Task task = taskService.getTaskById(taskId);
+        Subtask subtask = subtaskRepository.findById(subtaskId).orElseThrow();
+        subtask.setName(name);
+        subtask.setCompleted(isCompleted);
+        return subtaskRepository.save(subtask);
     }
 }
