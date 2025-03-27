@@ -5,10 +5,7 @@ import dev.ens.join_backend.model.*;
 import dev.ens.join_backend.model.enums.Priority;
 import dev.ens.join_backend.model.enums.Status;
 import dev.ens.join_backend.model.enums.UpdateMessage;
-import dev.ens.join_backend.repository.CategoryRepository;
-import dev.ens.join_backend.repository.ContactRepository;
-import dev.ens.join_backend.repository.TaskRepository;
-import dev.ens.join_backend.repository.UserRepository;
+import dev.ens.join_backend.repository.*;
 import dev.ens.join_backend.services.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +21,7 @@ public class TaskServiceImpl implements TaskService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final ContactRepository contactRepository;
+    private final SubtaskRepository subtaskRepository;
 
     @Override
     public List<TaskResponseDTO> getAllTasks() {
@@ -138,6 +136,9 @@ public class TaskServiceImpl implements TaskService {
             dto.setAssignedContacts(contactNames);
             dto.setCategoryName(task.getCategory() != null ? task.getCategory().getName() : null);
             taskResponseDTOs.add(dto);
+
+            List<Subtask> subtasks = task.getSubtasks();
+            dto.setSubtasks(subtasks);
         }
         return taskResponseDTOs;
     }

@@ -1,5 +1,6 @@
 package dev.ens.join_backend.dtos;
 
+import dev.ens.join_backend.model.Subtask;
 import dev.ens.join_backend.model.enums.Priority;
 import dev.ens.join_backend.model.enums.Status;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class TaskResponseDTO {
     private Status status;
     private Priority priority;
     private LocalDate dueDate;
+    private List<Subtask> subtasks;
     private List<String> assignedContacts;
     private String categoryName;
 
