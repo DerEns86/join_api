@@ -1,8 +1,12 @@
 package dev.ens.join_backend.mapper;
 
+import dev.ens.join_backend.dtos.SubtaskDTO;
 import dev.ens.join_backend.dtos.TaskRequestDTO;
+import dev.ens.join_backend.model.Subtask;
 import dev.ens.join_backend.model.Task;
 import dev.ens.join_backend.model.enums.Priority;
+
+import java.util.stream.Collectors;
 
 public class TaskMapper {
 
@@ -22,6 +26,10 @@ public class TaskMapper {
             dto.setPriority(task.getPriority());
         }
 
+        dto.setSubtasks(task.getSubtasks().stream()
+                .map(subtask -> new SubtaskDTO(subtask.getName(), subtask.isCompleted()))
+                .collect(Collectors.toList()));
+
         return dto;
     }
 
@@ -34,15 +42,15 @@ public class TaskMapper {
         task.setPriority(dto.getPriority());
         task.setDueDate(dto.getDueDate());
 
-//        if (dto.getSubtasks() != null) {
-//            task.setSubtasks(dto.getSubtasks().stream().map(subtaskDTO -> {
-//                Subtask subtask = new Subtask();
-//                subtask.setName(subtaskDTO.getName());
-//                subtask.setDescription(subtaskDTO.getDescription());
-//                subtask.setCompleted(subtaskDTO.isCompleted());
-//                return subtask;
-//            }).collect(Collectors.toList()));
-//        }
+        if (dto.getSubtasks() != null) {
+            task.setSubtasks(dto.getSubtasks().stream().map(subtaskDTO -> {
+                Subtask subtask = new Subtask();
+                subtask.setName(subtaskDTO.getName());
+                subtask.setCompleted(false);
+                subtask.setTask(task);
+                return subtask;
+            }).collect(Collectors.toList()));
+        }
 
         if(dto.getPriority() != Priority.LOW && dto.getPriority() != Priority.URGENT){
             task.setPriority(Priority.MEDIUM);

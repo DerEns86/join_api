@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class TaskRequestDTO {
     private Status status;
     private Priority priority;
     private LocalDate dueDate;
-    //private List<Long> subtaskId;
+    private List<SubtaskDTO> subtasks;
     //private List<String> assignedContacts;
     private String categoryName;
 
