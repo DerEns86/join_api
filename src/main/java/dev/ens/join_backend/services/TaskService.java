@@ -1,5 +1,6 @@
 package dev.ens.join_backend.services;
 
+import dev.ens.join_backend.dtos.TaskRequestDTO;
 import dev.ens.join_backend.dtos.TaskResponseDTO;
 import dev.ens.join_backend.model.Task;
 
@@ -11,7 +12,7 @@ public interface TaskService {
 
     List<TaskResponseDTO> getAllTasks();
 
-    Task createTask(Task task, String username);
+    Task createTask(TaskRequestDTO task, String username);
 
     Task updateTask(Long taskId, Task task);
 
