@@ -1,14 +1,12 @@
 package dev.ens.join_backend.services.impl;
 
+import dev.ens.join_backend.dtos.TaskRequestDTO;
 import dev.ens.join_backend.dtos.TaskResponseDTO;
+import dev.ens.join_backend.mapper.TaskMapper;
 import dev.ens.join_backend.model.*;
 import dev.ens.join_backend.model.enums.Priority;
-import dev.ens.join_backend.model.enums.Status;
 import dev.ens.join_backend.model.enums.UpdateMessage;
-import dev.ens.join_backend.repository.CategoryRepository;
-import dev.ens.join_backend.repository.ContactRepository;
-import dev.ens.join_backend.repository.TaskRepository;
-import dev.ens.join_backend.repository.UserRepository;
+import dev.ens.join_backend.repository.*;
 import dev.ens.join_backend.services.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,29 +30,26 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task createTask(Task task, String username) {
+    public Task createTask(TaskRequestDTO taskDto, String username) {
         User user = userRepository.findByUserName(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        task.setStatus(Status.PENDING);
-        if(task.getPriority() != Priority.LOW && task.getPriority() != Priority.URGENT){
-            task.setPriority(Priority.MEDIUM);
-        } else {
-            task.setPriority(task.getPriority());
-        }
-        task.setCreatedBy(user.getUserId());
-        task.setCreatedAt(LocalDate.now());
-        task.setUpdatedBy(user.getUserId());
-        task.setUpdatedAt(LocalDate.now());
-        task.setUpdateMessage(UpdateMessage.CREATED);
-        task.setContacts(new ArrayList<>());
+        //task.setStatus(Status.PENDING);
 
-        if (task.getCategory() != null && task.getCategory().getName() != null) {
-            Category category = categoryRepository.findByName(task.getCategory().getName())
-                    .orElseThrow(() -> new RuntimeException("Category not found: " + task.getCategory().getName()));
-            task.setCategory(category);
-        }
+        Category category = categoryRepository.findByName(taskDto.getCategoryName())
+                .orElseThrow(() -> new RuntimeException("Category not found: " + taskDto.getCategoryName()));
 
-        return taskRepository.save(task);
+        Task newTask = TaskMapper.toEntity(taskDto);
+
+        newTask.setCreatedBy(user.getUserId());
+        newTask.setCreatedAt(LocalDate.now());
+        newTask.setUpdatedBy(user.getUserId());
+        newTask.setUpdatedAt(LocalDate.now());
+        newTask.setUpdateMessage(UpdateMessage.CREATED);
+        newTask.setContacts(new ArrayList<>());
+        newTask.setCategory(category);
+
+
+        return taskRepository.save(newTask);
     }
 
     @Override
@@ -138,6 +133,9 @@ public class TaskServiceImpl implements TaskService {
             dto.setAssignedContacts(contactNames);
             dto.setCategoryName(task.getCategory() != null ? task.getCategory().getName() : null);
             taskResponseDTOs.add(dto);
+
+            List<Subtask> subtasks = task.getSubtasks();
+            dto.setSubtasks(subtasks);
         }
         return taskResponseDTOs;
     }

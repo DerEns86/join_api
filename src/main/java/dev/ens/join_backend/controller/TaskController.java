@@ -1,5 +1,6 @@
 package dev.ens.join_backend.controller;
 
+import dev.ens.join_backend.dtos.TaskRequestDTO;
 import dev.ens.join_backend.dtos.TaskResponseDTO;
 import dev.ens.join_backend.model.Task;
 import dev.ens.join_backend.services.TaskService;
@@ -26,7 +27,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody Task task, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Task> createTask(@RequestBody TaskRequestDTO task, @AuthenticationPrincipal UserDetails userDetails) {
         Task createdTask = taskService.createTask(task, userDetails.getUsername());
         return ResponseEntity.ok(createdTask);
     }
