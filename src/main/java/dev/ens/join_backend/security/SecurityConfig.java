@@ -43,6 +43,9 @@ public class SecurityConfig {
     @Value("${frontend.url}")
     private String frontendUrl;
 
+    @Value("${PORTFOLIO_URL}")
+    private String portfolioUrl;
+
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
@@ -60,9 +63,10 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/public/**").permitAll()
                 .requestMatchers("/v3/**").permitAll()
                 .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/api/public/wakeup").permitAll()
                 .anyRequest().authenticated());
 
-//        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+  //      http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.exceptionHandling(exception ->
                 exception.authenticationEntryPoint(unauthorizedHandler));
         http.addFilterBefore(authenticationJwtTokenFilter(),
@@ -75,7 +79,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
         // Allow specific origins
-        corsConfig.setAllowedOrigins(Arrays.asList(frontendUrl, "http://localhost:4200", "http://localhost:8080"));
+        corsConfig.setAllowedOrigins(Arrays.asList(frontendUrl, portfolioUrl, "http://localhost:4200", "http://localhost:8080"));
 
         // Allow specific HTTP methods
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
