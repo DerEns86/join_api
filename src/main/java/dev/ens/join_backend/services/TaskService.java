@@ -14,7 +14,7 @@ public interface TaskService {
 
     Task createTask(TaskRequestDTO task, String username);
 
-    Task updateTask(Long taskId, Task task);
+    Task updateTask(Long taskId, TaskRequestDTO task);
 
     void deleteTask(Long taskId);
 

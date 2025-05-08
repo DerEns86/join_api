@@ -53,22 +53,21 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task updateTask(Long taskId, Task task) {
+    public Task updateTask(Long taskId, TaskRequestDTO taskDto) {
         Task taskToUpdate = taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("No task found with id: " + taskId));
 
-        taskToUpdate.setName(task.getName());
-        taskToUpdate.setDescription(task.getDescription());
-        taskToUpdate.setStatus(task.getStatus());
-        taskToUpdate.setPriority(task.getPriority());
-        taskToUpdate.setDueDate(task.getDueDate());
+        Category category = categoryRepository.findByName(taskDto.getCategoryName())
+                .orElseThrow(() -> new RuntimeException("Category not found: " + taskDto.getCategoryName()));
+
+        taskToUpdate.setName(taskDto.getName());
+        taskToUpdate.setDescription(taskDto.getDescription());
+        taskToUpdate.setStatus(taskDto.getStatus());
+        taskToUpdate.setPriority(taskDto.getPriority());
+        taskToUpdate.setDueDate(taskDto.getDueDate());
+        taskToUpdate.setCategory(category);
         taskToUpdate.setUpdatedAt(LocalDate.now());
         taskToUpdate.setUpdateMessage(UpdateMessage.UPDATED);
-
-
-        Category category = categoryRepository.findByName(task.getCategory().getName())
-                .orElseThrow(() -> new RuntimeException("Category not found: " + task.getCategory().getName()));
-        taskToUpdate.setCategory(category);
 
         return taskRepository.save(taskToUpdate);
     }
