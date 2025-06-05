@@ -1,16 +1,15 @@
 # Join Backend
 
-This is the backend service for the Join application, built using Spring Boot.
+This is the backend API for a "Join" application clone, a project management tool, built using Spring Boot.<br>
 
-## Table of Contents
+With the Key Features
 
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Database setup](#database-setup)
-- [Configuration](#configuration)
-- [Running the Application](#running-the-application)
-- [Swagger](#swagger)
-- [Security](#security)
+* **Java Spring Boot**
+* **Spring Security**
+* **JWT Authentication**
+* **Swagger/OpenAPI**
+* **Docker**
+* **PostgreSQL**
 
 ## Requirements
 
